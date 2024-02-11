@@ -39,6 +39,22 @@ module Clino
     end
 
     def self.parse_options(args)
+      pos_args = []
+      for arg in args
+        if arg.start_with?("-")
+          break
+        else
+          pos_args << arg
+        end
+      end
+
+      args = args[pos_args.length..-1]
+
+      pos_args.each_with_index do |arg, idx|
+        option = @options.each_pair.find { |k, v| v[:idx] == idx }
+        @input_options[option[0]] = arg if option
+      end
+
       OptionParser.new do |opts|
         @options.each do |name, _|
           opts.on("--#{name} #{name.upcase}") do |v|
@@ -59,9 +75,9 @@ module Clino
         when :req
           positional_values << @input_options[name]
         when :opt
-          positional_values << @input_options[name]
+          positional_values << @input_options[name] unless @input_options[name].nil?
         when :key
-          keyword_values[name] = @input_options[name]
+          keyword_values[name] = @input_options[name] unless @input_options[name].nil?
         when :keyreq
           keyword_values[name] = @input_options[name]
         end
@@ -70,10 +86,30 @@ module Clino
     end
 
     def self.print_help
-      puts "Usage: #{$0} [options]"
-      @options.each do |name, _|
-        puts "--#{name} #{name.upcase}"
+      print "Usage: #{$PROGRAM_NAME}"
+
+      # Print :req and :opt arguments sorted by idx
+      @options.filter { |_, option| !option[:idx].nil? }.sort_by { |_, option| option[:idx] }.each do |name, option|
+        if option[:type] == :req
+          print " #{name}"
+        elsif option[:type] == :opt
+          print " [#{name}]"
+        end
       end
+
+      # puts ""
+
+      # Print :keyreq and :key arguments
+      @options.each do |name, option|
+        print " --#{name} #{name.upcase}" if option[:type] == :keyreq
+      end
+
+      @options.each do |name, option|
+        print " [--#{name} #{name.upcase}]" if option[:type] == :key
+      end
+
+      puts ""
+
       puts "-h, --help, Prints this help"
     end
   end

@@ -172,7 +172,9 @@ Unfortunately, ruby doesn't allow inspecting the method's signature default valu
 
 #### Randomizer Advanced Example
 
-Let's write an advanced version of the randomizer that has CLI signature.
+Let's write an advanced version of the randomizer that has CLI signature. 
+
+Our entry point is the `run` method, which is called with the parsed and validated input.
 
 ```ruby
 # randomizer.rb

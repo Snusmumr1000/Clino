@@ -2,11 +2,13 @@
 
 class CliSignature
   attr_reader :args, :opts, :args_arr
+  attr_accessor :description
 
   def initialize
     @args = {}
     @args_arr = []
     @opts = {}
+    @description = nil
     @help = nil
   end
 
@@ -22,28 +24,66 @@ class CliSignature
   def help
     return @help unless @help.nil?
 
-    @help = ""
-    @help += "Usage: #{$PROGRAM_NAME}"
+    program_name = $PROGRAM_NAME
+    @help = "Script: #{program_name}\n"
 
-    # Print :req and :opt arguments sorted by idx
-    @args_arr.each do |arg|
-      @help += if arg.required?
-                 " #{arg.name}"
-               else
-                 " [#{arg.name}]"
-               end
+    unless @description.nil?
+      @help += "\nDescription:\n"
+      @help += "  #{@description}\n"
     end
 
-    @opts.each do |name, option|
-      @help += " --#{name} #{name.upcase}" if option.required?
+    unless @args_arr.empty?
+      @help += "\nArguments:\n"
+      @args_arr.each do |arg|
+        arg_part = "  #{arg.required? ? "<#{arg.name}>" : "[<#{arg.name}>]"}"
+        arg_desc = arg.desc ? " # #{arg.desc}" : ""
+        arg_default = arg.default != :none ? " [default: #{arg.default}]" : ""
+        arg_type = " [#{arg.type}]"
+        @help += "#{arg_desc}\n#{arg_part}#{arg_type}#{arg_default}\n"
+      end
     end
 
-    @opts.each do |name, option|
-      @help += " [--#{name} #{name.upcase}]" unless option.required?
+    unless @opts.empty?
+      @help += "\nOptions:\n"
+      @opts.each do |name, option|
+        opt_part = "  #{option.required? ? "--#{name}" : "[--#{name}]"}"
+        if option.aliases && !option.aliases.empty?
+          aliases = option.aliases.map { |a| "-#{a}" }.join(", ")
+          opt_part += " (#{aliases})"
+        end
+        opt_desc = option.desc ? " # #{option.desc}" : ""
+        opt_default = option.default != :none ? " [default: #{option.default}]" : ""
+        opt_type = " [#{option.type}]"
+        @help += "#{opt_desc}\n#{opt_part}#{opt_type} #{opt_default}\n"
+      end
     end
 
-    @help += "\n"
+    @help += "\nUse -h, --help to print this help message.\n"
 
-    "#{@help}-h, --help, prints this help\n"
+    @help
+  end
+
+  def self.from_func(func)
+    arg_types = %i[req opt]
+    opt_types = %i[key keyreq]
+    signature = CliSignature.new
+    func.parameters.each_with_index do |param, idx|
+      param_type, param_name = param
+      if arg_types.include?(param_type)
+        arg = Domain::ArgSignature.new(
+          name: param_name,
+          pos: idx
+        )
+        arg.default = :unknown if param_type == :opt
+        signature.add_arg arg
+      elsif opt_types.include?(param_type)
+        opt = Domain::OptSignature.new(
+          name: param_name
+        )
+        opt.default = :unknown if param_type == :key
+        signature.add_opt opt
+      end
+    end
+    signature
   end
 end

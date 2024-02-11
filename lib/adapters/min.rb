@@ -8,7 +8,7 @@ class Min
   def initialize(command)
     @input = {}
     @method = method command
-    @signature = generate_signature @method
+    @signature = CliSignature.from_func @method
   end
 
   def run(args = ARGV)
@@ -20,30 +20,6 @@ class Min
     end
 
     call_method_with_args
-  end
-
-  def generate_signature(method_)
-    arg_types = %i[req opt]
-    opt_types = %i[key keyreq]
-    signature = CliSignature.new
-    method_.parameters.each_with_index do |param, idx|
-      param_type, param_name = param
-      if arg_types.include?(param_type)
-        arg = Domain::ArgSignature.new(
-          name: param_name,
-          pos: idx
-        )
-        arg.default = :unknown if param_type == :opt
-        signature.add_arg arg
-      elsif opt_types.include?(param_type)
-        opt = Domain::OptSignature.new(
-          name: param_name
-        )
-        opt.default = :unknown if param_type == :key
-        signature.add_opt opt
-      end
-    end
-    signature
   end
 
   def parse_options(args)
@@ -78,7 +54,7 @@ class Min
     keyword_values = {}
 
     @signature.args_arr.each do |arg|
-      if arg.required
+      if arg.required?
         positional_values << @input[arg.name]
       else
         positional_values << @input[arg.name] unless @input[arg.name].nil?
@@ -86,7 +62,7 @@ class Min
     end
 
     @signature.opts.each do |opt_name, opt|
-      if opt.required
+      if opt.require
         keyword_values[opt_name] = @input[opt_name]
       else
         keyword_values[opt_name] = @input[opt_name] unless @input[opt_name].nil?

@@ -1,37 +1,51 @@
 # frozen_string_literal: true
 
-class Cli
-  @args = {}
-  @opts = {}
-  @description = ""
+require_relative "../domain/signature/cli_signature"
+require_relative "../domain/domain"
 
+class Cli
   class << self
-    attr_accessor :args, :opts, :description
+    attr_reader :opt_buffer, :arg_buffer, :description
 
     def desc(description)
       @description = description
     end
 
-    def opt(name, type:, desc:, aliases: [], default: nil)
-      @opts[name] = Domain::OptSignature.new(name: name.to_s, type: type, default: default, desc: desc)
+    def opt(name, type: :string, desc: nil, aliases: [], default: :none)
+      @opt_buffer ||= {}
+      @opt_buffer[name] = Domain::OptSignature.new(name: name, type: type, default: default, desc: desc,
+                                                   aliases: aliases)
     end
 
-    def arg(name, type:, desc:, default: nil, pos: nil)
-      @args[name] = Domain::ArgSignature.new(name: name.to_s, type: type, default: default, desc: desc, pos: pos)
+    def arg(name, type: :string, desc: nil, default: :none, pos: nil)
+      @arg_buffer ||= {}
+      @arg_buffer[name] = Domain::ArgSignature.new(name: name, type: type, default: default, desc: desc, pos: pos)
+    end
+  end
+
+  def initialize
+    @input = {}
+    @signature ||= CliSignature.from_func method(:run)
+    @signature.args_arr.each do |arg|
+      self.class.arg_buffer[arg.name].pos = arg.pos
+      @signature.add_arg(self.class.arg_buffer[arg.name])
     end
 
-    def start
-      # This method should parse the CLI arguments and options, matching them against the defined args and opts.
-      # Actual implementation depends on how you want to parse and use command-line inputs.
-      puts "CLI started with description: #{@description}"
-      list_options_and_arguments
+    @signature.opts.each_key do |name|
+      @signature.add_opt(self.class.opt_buffer[name])
     end
 
-    def list_options_and_arguments
-      puts "Options:"
-      @opts.each { |name, opt| puts "  #{name}: #{opt.desc}" }
-      puts "Arguments:"
-      @args.each { |name, arg| puts "  #{name}: #{arg.desc}" }
-    end
+    @signature.description = self.class.description
+  end
+
+  def start(args = ARGV)
+    # This method should parse the CLI arguments and options, matching them against the defined args and opts.
+    # Actual implementation depends on how you want to parse and use command-line inputs.
+    puts "CLI started with args: #{args.inspect}"
+    print_help
+  end
+
+  def print_help
+    puts @signature.help
   end
 end

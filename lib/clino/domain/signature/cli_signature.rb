@@ -49,7 +49,6 @@ class CliSignature
     unless @opts.empty?
       @help += "\nOptions:\n"
       @opts.each do |name, option|
-        name = "[no-]#{name}" if option.type == :bool
         opt_part = "  #{option.required? ? "--#{name}" : "[--#{name}]"}"
         if option.aliases && !option.aliases.empty?
           aliases = option.aliases.join(", ")

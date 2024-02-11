@@ -220,7 +220,7 @@ RandomGeneratorCLI.new.start
 Run the script with the following command:
 
 ```bash
-ruby randomizer.rb 1 2 --alg uni --i y # => some number from [1.0, 2.0]
+ruby randomizer.rb 1 2 --alg uni --i # => some number from [1.0, 2.0]
 ```
 
 Get help with the following command:
@@ -257,7 +257,7 @@ Options:
  # Algorithm to use (uni or exp)
   --alg (-a) [string] 
  # Include upper bound
-  [--[no-]incl] (-[no-]i) [bool]  [default: false]
+  [--incl] (-i) [bool]  [default: false]
 
 Usage: randomizer.rb [arguments] [options]
 Use --h, --help to print this help message.
@@ -326,7 +326,6 @@ Use --h, --help to print this help message.
 - [ ] Add CI/CD
 - [ ] Add more examples
 - [ ] Create a proper documentation
-- [ ] Better boolean flag handling
 
 ## Contributing
 

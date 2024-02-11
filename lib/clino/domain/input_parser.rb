@@ -22,15 +22,7 @@ module InputParser
     OptionParser.new do |opt|
       signature.opts.each_key do |name|
         signature_opt = signature.opts[name]
-        type = signature_opt.type
         aliases = signature_opt.aliases
-        if type == :bool
-          # TBD: Here is a bug, it doesn't want to accept switch, but accepts only with [no-] prefix
-          opt.on(*aliases, "--[no-]#{name}") do |v|
-            input[name] = v
-          end
-          next
-        end
 
         if signature_opt.required?
           opt.on(*aliases, "--#{name} #{name.upcase}") do |v|

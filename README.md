@@ -210,7 +210,7 @@ RandomGeneratorCLI.new.start
 Run the script with the following command:
 
 ```bash
-ruby randomizer.rb 1 10 --alg uni  # => some number from [1.0, 9.0]
+ruby randomizer.rb 1 2 --alg uni --i y # => some number from [1.0, 2.0]
 ```
 
 Get help with the following command:
@@ -316,6 +316,7 @@ Use --h, --help to print this help message.
 - [ ] Add CI/CD
 - [ ] Add more examples
 - [ ] Create a proper documentation
+- [ ] Better boolean flag handling
 
 ## Contributing
 

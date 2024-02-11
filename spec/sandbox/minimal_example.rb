@@ -2,36 +2,28 @@
 
 # frozen_string_literal: true
 
-require_relative "../../lib/clino"
+require_relative "../../lib/adapters/min"
 
-def _generate_rnd_uni(from, to, incl)
-  if incl
-    rand(from..to)
-  else
-    rand(from...to)
-  end
+def generate_rnd_uni(from, to, incl)
+  range = incl ? from..to : from...to
+  rand(range)
 end
 
-def _generate_rnd_exp(from, to, _incl)
-  mean = (from + to) / 2
+def generate_rnd_exp(from, to, _incl)
+  mean = (from + to) / 2.0
   -mean * Math.log(rand) if mean.positive?
 end
 
-def generate_rnd(from, to, mult = 1, alg:, incl: false)
-  from = Integer(from)
-  to = Integer(to)
-  mult = Integer(mult)
+def generate_rnd(from, to, mult = 1.0, alg:, incl: false)
+  from = from.to_i
+  to = to.to_i
+  mult = mult.to_f
   incl = incl.to_s.downcase == "true"
 
   raise ArgumentError, "The lower bound (#{from}) must be less than the upper bound (#{to})" if from >= to
   raise ArgumentError, "Algorithm must be one of: [uni, exp]" unless %w[uni exp].include?(alg)
 
-  generators = {
-    "uni" => method(:_generate_rnd_uni),
-    "exp" => method(:_generate_rnd_exp)
-  }
-
-  puts generators[alg].call(from, to, incl) * mult
+  puts send("generate_rnd_#{alg}", from, to, incl) * mult
 end
 
-Clino::MinFactory.run(:generate_rnd)
+Min.new(:generate_rnd).run

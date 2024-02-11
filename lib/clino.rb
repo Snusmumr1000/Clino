@@ -14,9 +14,9 @@ module Clino
     @options = {}
     @input_options = {}
 
-    def self.run(command, definition = nil, args = ARGV)
+    def self.run(command, args = ARGV)
       @method = method command
-      generate_cmd @method if definition.nil?
+      generate_cmd @method
 
       parse_options args
 
@@ -40,18 +40,16 @@ module Clino
 
     def self.parse_options(args)
       pos_args = []
-      for arg in args
-        if arg.start_with?("-")
-          break
-        else
-          pos_args << arg
-        end
+      args.each do |arg|
+        break if arg.start_with?("-")
+
+        pos_args << arg
       end
 
-      args = args[pos_args.length..-1]
+      args = args[pos_args.length..]
 
       pos_args.each_with_index do |arg, idx|
-        option = @options.each_pair.find { |k, v| v[:idx] == idx }
+        option = @options.each_pair.find { |_k, v| v[:idx] == idx }
         @input_options[option[0]] = arg if option
       end
 
@@ -112,5 +110,9 @@ module Clino
 
       puts "-h, --help, Prints this help"
     end
+  end
+
+  module Cli
+    def self.start(args = ARGV); end
   end
 end

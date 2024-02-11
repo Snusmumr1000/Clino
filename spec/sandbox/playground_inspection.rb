@@ -1,14 +1,15 @@
 # frozen_string_literal: true
+# rubocop:disable all
 
-def demo(_one, _two = :b, *_three, four:, five: :e, **_six)
+def demo(one, two = :b, *three, four:, five: :e, **six)
   params = method(:demo).parameters
 
-  puts(_one)
-  puts(_two)
-  puts(_three)
+  puts(one)
+  puts(two)
+  puts(three)
   puts(four)
   puts(five)
-  puts(_six)
+  puts(six)
 
   params.each do |param|
     type, name = param

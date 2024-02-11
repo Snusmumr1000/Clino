@@ -4,7 +4,7 @@
 
 require_relative "../../lib/clino"
 
-def _generate_rnd(from, to, incl)
+def _generate_rnd_uni(from, to, incl)
   if incl
     rand(from..to)
   else
@@ -12,28 +12,28 @@ def _generate_rnd(from, to, incl)
   end
 end
 
-def generate_rnd(from, to, incl)
-  puts _generate_rnd(from, to, incl)
+def _generate_rnd_exp(from, to, _incl)
+  mean = (from + to) / 2
+  -mean * Math.log(rand) if mean.positive?
 end
 
-cmd_definition = {
-  name: :generate,
-  opts: {
-    incl: {
-      type: :bool,
-      default: false,
-      desc: "Include the upper bound"
-    },
-    from: {
-      type: :int,
-      desc: "The lower bound (inclusive)"
-    },
-    to: {
-      type: :int,
-      desc: "The upper bound (exclusive)"
-    }
-  },
-  desc: "Generate a random number"
-}
+def generate_rnd(from, to, mult, alg:, incl:)
+  raise ArgumentError, "The lower bound (#{from}) must be less than the upper bound (#{to})" if from >= to
+  raise ArgumentError, "Algorithm must be one of: [uni, exp]" unless %w[uni exp].include?(alg)
 
-Clino::MinFactory.run(:generate_rnd, cmd_definition)
+  send("generate_rnd_#{alg}", from, to, incl) * mult
+end
+
+Clino::MinFactory.run(Cmd.new(
+                        args: {
+                          from: InputTypes::Integer.new,
+                          to: InputTypes::Integer.new,
+                          mult: InputTypes::Float.new(2)
+                        },
+                        opts: {
+                          alg: InputTypes::String.new,
+                          incl: InputTypes::Boolean.new(true)
+                        },
+                        method: :generate_rnd,
+                        output_handler: ->(result) { puts result }
+                      ))

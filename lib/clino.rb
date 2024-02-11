@@ -4,6 +4,9 @@ require_relative "Clinohumite/version"
 require "optparse"
 require "set"
 
+POSITIONAL_PARAMS = Set.new(%i[req opt])
+
+# Clinohumite
 module Clino
   # Comment
   module MinFactory
@@ -11,12 +14,16 @@ module Clino
     @options = {}
     @input_options = {}
 
-    def self.run(command, args = ARGV)
+    def self.run(command, definition = nil, args = ARGV)
       @method = method command
-      generate_cmd @method
+      generate_cmd @method if definition.nil?
 
       parse_options args
-      print_help and return if @input_options[:help]
+
+      if @input_options[:help]
+        print_help
+        return
+      end
 
       call_method_with_args
     end
@@ -24,10 +31,9 @@ module Clino
     def self.generate_cmd(method_)
       method_.parameters.each_with_index do |param, idx|
         type = param[0]
-        positional_params = Set.new(%i[req opt])
         @options[param[1]] = {
           type: type,
-          idx: positional_params.include?(type) ? idx : nil
+          idx: POSITIONAL_PARAMS.include?(type) ? idx : nil
         }
       end
     end
@@ -47,18 +53,25 @@ module Clino
 
     def self.call_method_with_args
       positional_values = []
+      keyword_values = {}
       @options.each do |name, option|
-        if option[:idx]
-          positional_values[option[:idx]] = @input_options[name]
-          next
+        case option[:type]
+        when :req
+          positional_values << @input_options[name]
+        when :opt
+          positional_values << @input_options[name]
+        when :key
+          keyword_values[name] = @input_options[name]
+        when :keyreq
+          keyword_values[name] = @input_options[name]
         end
       end
-      print(@method.call(*positional_values))
+      @method.call(*positional_values, **keyword_values)
     end
 
-    def print_help
-      puts "Usage: #{@method.name} [options]"
-      @options.each do |name|
+    def self.print_help
+      puts "Usage: #{$0} [options]"
+      @options.each do |name, _|
         puts "--#{name} #{name.upcase}"
       end
       puts "-h, --help, Prints this help"

@@ -2,7 +2,7 @@
 
 # frozen_string_literal: true
 
-require_relative "../lib/clino"
+require_relative "../../lib/clino"
 
 def _generate_rnd(from, to, incl)
   if incl

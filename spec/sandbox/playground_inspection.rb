@@ -3,6 +3,13 @@
 def demo(_one, _two = :b, *_three, four:, five: :e, **_six)
   params = method(:demo).parameters
 
+  puts(_one)
+  puts(_two)
+  puts(_three)
+  puts(four)
+  puts(five)
+  puts(_six)
+
   params.each do |param|
     type, name = param
     case type
@@ -24,6 +31,8 @@ def demo(_one, _two = :b, *_three, four:, five: :e, **_six)
   end
 end
 
-demo("Hello", four: 42) do
+d = { four: 42, five: :e }
+
+demo(_one = "Hello", **d) do
   # Some block code
 end

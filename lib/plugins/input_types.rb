@@ -59,8 +59,8 @@ class InputTypes
   end
 end
 
-INPUT_TYPES = InputTypes.new
+INPUT_TYPES_PLUGIN = InputTypes.new
 
 def load_input(type, value)
-  INPUT_TYPES.convert(type, value)
+  INPUT_TYPES_PLUGIN.convert(type, value)
 end

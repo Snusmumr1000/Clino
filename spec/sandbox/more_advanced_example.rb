@@ -14,9 +14,12 @@ class RandomGeneratorCLI < Cli
     send("generate_rnd_#{alg}", from, to, incl) * mult
   end
 
-  desc "Generate a random number"
+  desc <<-TEXT
+    Generate a random number between the given bounds
+    using the specified algorithm and multiply it by the given multiplier
+  TEXT
   opt :alg, aliases: ["-a"], type: :string, desc: "Algorithm to use (uni or exp)"
-  opt :incl, aliases: ["-i"], type: :boolean, default: true, desc: "Include upper bound"
+  opt :incl, aliases: ["-i"], type: :bool, default: true, desc: "Include upper bound"
   arg :from, type: :integer, desc: "Lower bound"
   arg :to, type: :integer, desc: "Upper bound"
   arg :mult, type: :float, default: 1, desc: "Multiplier"

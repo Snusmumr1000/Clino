@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require_relative "../../common/utils"
+require_relative "../../plugins/input_types"
+
 class CliSignature
   attr_reader :args, :opts, :args_arr
   attr_accessor :description
@@ -37,7 +40,7 @@ class CliSignature
       @args_arr.each do |arg|
         arg_part = "  #{arg.required? ? "<#{arg.name}>" : "[<#{arg.name}>]"}"
         arg_desc = arg.desc ? " # #{arg.desc}" : ""
-        arg_default = arg.default != :none ? " [default: #{arg.default}]" : ""
+        arg_default = arg.default != :none ? " [default: #{load_input arg.type, arg.default}]" : ""
         arg_type = " [#{arg.type}]"
         @help += "#{arg_desc}\n#{arg_part}#{arg_type}#{arg_default}\n"
       end
@@ -46,9 +49,10 @@ class CliSignature
     unless @opts.empty?
       @help += "\nOptions:\n"
       @opts.each do |name, option|
+        name = "[no-]#{name}" if option.type == :bool
         opt_part = "  #{option.required? ? "--#{name}" : "[--#{name}]"}"
         if option.aliases && !option.aliases.empty?
-          aliases = option.aliases.map { |a| "-#{a}" }.join(", ")
+          aliases = option.aliases.join(", ")
           opt_part += " (#{aliases})"
         end
         opt_desc = option.desc ? " # #{option.desc}" : ""
@@ -85,5 +89,21 @@ class CliSignature
       end
     end
     signature
+  end
+
+  def default_opts
+    opts = {}
+    @opts.each do |name, opt|
+      opts[name] = opt.default unless opt.required?
+    end
+    opts
+  end
+
+  def default_args
+    args = []
+    @args_arr.each do |arg|
+      args << arg.default unless arg.required?
+    end
+    args
   end
 end

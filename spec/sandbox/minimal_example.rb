@@ -15,10 +15,10 @@ def generate_rnd_exp(from, to, _incl)
 end
 
 def generate_rnd(from, to, mult = 1.0, alg:, incl: false)
-  from = from.to_i
-  to = to.to_i
-  mult = mult.to_f
-  incl = incl.to_s.downcase == "true"
+  from = load_input :integer, from
+  to = load_input :integer, to
+  mult = load_input :float, mult
+  incl = load_input :bool, incl
 
   raise ArgumentError, "The lower bound (#{from}) must be less than the upper bound (#{to})" if from >= to
   raise ArgumentError, "Algorithm must be one of: [uni, exp]" unless %w[uni exp].include?(alg)
@@ -26,4 +26,4 @@ def generate_rnd(from, to, mult = 1.0, alg:, incl: false)
   puts send("generate_rnd_#{alg}", from, to, incl) * mult
 end
 
-Min.new(:generate_rnd).run
+Min.new(:generate_rnd).start

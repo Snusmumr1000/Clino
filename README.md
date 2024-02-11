@@ -6,11 +6,19 @@ It is inspired by the [Thor](https://github.com/rails/thor) and [Typer](https://
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Install this gem as a regular gem:
+
+```bash
+gem install clino
+```
+
+or add this line to your application's Gemfile:
 
 ```ruby
 gem 'clino'
 ```
+
+Link: [RubyGems](https://rubygems.org/gems/clino)
 
 ## Usage
 

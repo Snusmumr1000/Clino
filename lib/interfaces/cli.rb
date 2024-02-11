@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../domain/signature/cli_signature"
-require_relative "../domain/domain"
+require_relative "../domain/signature/base"
 require_relative "../domain/input_parser"
 require_relative "../domain/result_obtainer"
 require_relative "base/base_cli"
@@ -19,14 +19,14 @@ class Cli
       bool_prefix = type == :bool ? "[no-]" : ""
       aliases = aliases.map { |a| "-#{bool_prefix}#{general_strip a, "-"}" }
       default = load_input type, default unless default == :none
-      @opt_buffer[name] = Domain::OptSignature.new(name: name, type: type, default: default, desc: desc,
-                                                   aliases: aliases)
+      @opt_buffer[name] = Base::OptSignature.new(name: name, type: type, default: default, desc: desc,
+                                                 aliases: aliases)
     end
 
     def arg(name, type: :string, desc: nil, default: :none, pos: nil)
       @arg_buffer ||= {}
       default = load_input type, default unless default == :none
-      @arg_buffer[name] = Domain::ArgSignature.new(name: name, type: type, default: default, desc: desc, pos: pos)
+      @arg_buffer[name] = Base::ArgSignature.new(name: name, type: type, default: default, desc: desc, pos: pos)
     end
   end
 

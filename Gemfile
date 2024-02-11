@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in Clinohumite.gemspec
+# Specify your gem's dependencies in Clino.gemspec
 gemspec
 
 gem "rake", "~> 13.0"

@@ -74,14 +74,14 @@ class CliSignature
     func.parameters.each_with_index do |param, idx|
       param_type, param_name = param
       if arg_types.include?(param_type)
-        arg = Domain::ArgSignature.new(
+        arg = Base::ArgSignature.new(
           name: param_name,
           pos: idx
         )
         arg.default = :unknown if param_type == :opt
         signature.add_arg arg
       elsif opt_types.include?(param_type)
-        opt = Domain::OptSignature.new(
+        opt = Base::OptSignature.new(
           name: param_name
         )
         opt.default = :unknown if param_type == :key

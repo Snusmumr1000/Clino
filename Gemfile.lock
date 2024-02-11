@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    Clinohumite (0.1.0)
+    Clino (0.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -80,7 +80,7 @@ PLATFORMS
   arm64-darwin-22
 
 DEPENDENCIES
-  Clinohumite!
+  Clino!
   dry-monads (~> 1.3)
   dry-struct (~> 1.5)
   rake (~> 13.0)

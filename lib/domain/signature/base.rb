@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Domain
+module Base
   BaseSignatureStruct = Struct.new(:name, :type, :default, :desc)
 
   module BaseSignatureValidator

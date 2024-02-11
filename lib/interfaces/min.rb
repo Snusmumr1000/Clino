@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../domain/domain"
+require_relative "../domain/signature/base"
 require_relative "../domain/input_parser"
 require_relative "../domain/signature/cli_signature"
 require_relative "../domain/result_obtainer"

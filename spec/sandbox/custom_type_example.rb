@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../../lib/adapters/cli"
+require_relative "../../lib/interfaces/cli"
 require_relative "../../lib/plugins/input_types"
 
 def convert_positive_integer(value)

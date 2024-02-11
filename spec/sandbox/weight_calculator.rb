@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative "../../lib/interfaces/cli"
-require_relative "../../lib/plugins/input_types"
+require "clino/interfaces/cli"
+require "clino/plugins/input_types"
 
 def convert_positive_integer(value)
   raise ArgumentError, "Value must be a positive integer" unless value.to_i.positive?

@@ -7,6 +7,8 @@ module ResultObtainer
 
     signature.args_arr.each do |arg|
       if arg.required?
+        raise ArgumentError, "Missing required argument: #{arg.name}" unless input.key?(arg.name)
+
         positional_values << input[arg.name]
       else
         positional_values << input[arg.name] unless input[arg.name].nil?
@@ -28,7 +30,7 @@ module ResultObtainer
 
     default_args = signature.default_args
     last_default_args_needed = signature.args_arr.length - positional_values.length
-    positional_values = positional_values + default_args[-last_default_args_needed..-1]
+    positional_values += default_args[-last_default_args_needed..]
     positional_values = positional_values.filter { |v| v != :unknown }
 
     method.call(*positional_values, **keyword_values)

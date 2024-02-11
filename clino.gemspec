@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require_relative "lib/Clino/version"
+require_relative "lib/clino/version"
 
 Gem::Specification.new do |spec|
-  spec.name = "Clino"
+  spec.name = "clino"
   spec.version = Clino::VERSION
   spec.authors = ["Tikhon Zaikin"]
   spec.email = ["snusmumrmail@gmail.com"]
 
   spec.summary = "Min CLI generator"
-  spec.description = "Clino is a minimalistic CLI generator
+  spec.description = "clino is a minimalistic CLI generator
 that allows you to create a CLI application with minimal effort."
   spec.homepage = "https://github.com/snusmumr1000/Clino"
   spec.license = "MIT"

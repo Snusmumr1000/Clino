@@ -2,7 +2,7 @@
 
 # frozen_string_literal: true
 
-require_relative "../../lib/interfaces/min"
+require "clino/interfaces/min"
 
 def generate_rnd_uni(from, to, incl)
   range = incl ? from..to : from...to

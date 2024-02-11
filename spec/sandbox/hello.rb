@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../../lib/interfaces/min"
+require "clino/interfaces/min"
 
 def hello(name)
   "Hello, #{name}!"

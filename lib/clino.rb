@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
-require_relative "Clino/version"
-require "optparse"
-require "set"
+require_relative "clino/version"
 
-POSITIONAL_PARAMS = Set.new(%i[req opt])
-
-# Clino
+# clino
 module Clino
 end

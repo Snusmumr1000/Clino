@@ -3,7 +3,7 @@
 # !/usr/bin/env ruby
 
 require "securerandom"
-require_relative "../../lib/interfaces/cli"
+require "clino/interfaces/cli"
 
 class RandomGeneratorCLI < Cli
   # include Cli

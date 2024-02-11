@@ -62,7 +62,9 @@ class CliSignature
       end
     end
 
-    @help += "\nUse -h, --help to print this help message.\n"
+    @help += "\nUsage: #{program_name} [arguments] [options]"
+
+    @help += "\nUse --h, --help to print this help message.\n"
 
     @help
   end

@@ -48,14 +48,10 @@ Let's write a simple script that takes a name as an argument and prints a greeti
 
 require "clino/interfaces/min"
 
-def hello(name)
-  "Hello, #{name}!"
-end
-
-Min.new(:hello).start
+Min.new(->(name) { "Hello, #{name}!" }).start
 ```
 
-Writing method containing only business logic is enough, as the input and output handling is done by the `Min` interface.
+Writing lambda containing only business logic is enough, as the input and output handling is done by the `Min` interface.
 
 Run the script with the following command:
 

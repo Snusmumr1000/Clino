@@ -13,7 +13,7 @@ class Min
 
   def initialize(command)
     @method = method command if command.is_a? Symbol
-    @method = command if command.is_a? Method
+    @method = command if is_callable_with_parameters? command
 
     @signature = CliSignature.from_func @method
   end

@@ -65,9 +65,16 @@ RSpec.describe "Features" do
     res = DECODER_MIN.start_raw(["--text", world_base64, "--enc", "base64"])
     expect(res).to eq("World")
   end
-  
+
   it "replaces underscores with dashes in option and arg names" do
     res = CUT_MIN.start_raw(%w[Hello --cut-text o])
     expect(res).to eq("Hell")
-  end 
+  end
+
+  it "prints help" do
+    expect(HELLO_WORLD_MIN.start_raw(%w[--help])).to include("<name> [string]")
+    expect(HELLO_WORLD_MIN.start_raw(%w[--help])).to include("[--help] (-h) [bool]  [default: false]")
+    expect(HELLO_WORLD_MIN.start_raw(%w[-h])).to include("<name> [string]")
+    expect(HELLO_WORLD_MIN.start_raw(%w[-h])).to include("[--help] (-h) [bool]  [default: false]")
+  end
 end

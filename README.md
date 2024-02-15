@@ -68,7 +68,7 @@ ruby hello.rb --help
 or 
 
 ```bash
-ruby hello.rb --h
+ruby hello.rb -h
 ```
 
 It will print the following output:
@@ -81,7 +81,6 @@ Arguments:
   <name> [string]
 
 Usage: hello.rb [arguments] [options]
-Use --h, --help to print this help message.
 ```
 #### Randomizer Minimalistic Example
 
@@ -136,7 +135,7 @@ ruby min_randomizer.rb --help
 or
 
 ```bash
-ruby min_randomizer.rb --h
+ruby min_randomizer.rb -h
 ```
 
 It will print the following output:
@@ -159,7 +158,6 @@ Options:
   [--incl] [string]  [default: unknown]
 
 Usage: min_randomizer.rb [arguments] [options]
-Use --h, --help to print this help message.
 ```
 
 As we can see, ruby's metaprogramming capabilities allow us to create a simple CLI, however it doesn't provide a way to handle complex input.
@@ -228,7 +226,7 @@ ruby randomizer.rb --help
 or
 
 ```bash
-ruby randomizer.rb --h
+ruby randomizer.rb -h
 ```
 
 It will print the following output:
@@ -256,7 +254,6 @@ Options:
   [--incl] (-i) [bool]  [default: false]
 
 Usage: randomizer.rb [arguments] [options]
-Use --h, --help to print this help message.
 ```
 
 As we can see, all the default values, helping notes, and types are written out, and the input validation is handled automatically.
@@ -310,7 +307,6 @@ Arguments:
   <height> [positive_integer]
 
 Usage: weight_calculator.rb [arguments] [options]
-Use --h, --help to print this help message.
 ```
 
 ## Improvements

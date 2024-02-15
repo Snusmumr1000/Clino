@@ -19,17 +19,13 @@ module BaseCli
   end
 
   def parse_args_by_signature(args)
-    input = parse_input args, @signature
-
-    if input[:help]
-      print_help
-      return nil
-    end
-
-    input
+    parse_input args, @signature
   end
 
   def run_instance(input)
+    if input[:help]
+      return @signature.help
+    end
     call_method_with_args @signature, @method, input
   end
 

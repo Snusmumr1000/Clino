@@ -16,6 +16,8 @@ module ResultObtainer
     end
 
     signature.opts.each do |opt_name, opt|
+      next if opt.exec_skip
+
       if opt.required?
         keyword_values[opt_name] = input[opt_name] if input.key?(opt_name)
       else
@@ -25,6 +27,8 @@ module ResultObtainer
 
     default_opts = signature.default_opts
     default_opts.each do |opt_name, opt|
+      next if signature.opts[opt_name].exec_skip
+
       keyword_values[opt_name] = opt unless keyword_values.key?(opt_name) || opt == :unknown
     end
 

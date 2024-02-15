@@ -8,7 +8,14 @@ require_relative "base/base_cli"
 
 class Cli
   class << self
-    attr_reader :opt_buffer, :arg_buffer, :description
+    attr_reader :description
+    def opt_buffer
+      @opt_buffer || {}
+    end
+
+    def arg_buffer
+      @arg_buffer || {}
+    end
 
     def desc(description)
       @description = description
@@ -38,7 +45,7 @@ class Cli
     end
 
     @signature.opts.each_key do |name|
-      @signature.add_opt(self.class.opt_buffer[name])
+      @signature.add_opt(self.class.opt_buffer[name]) if self.class.opt_buffer.key? name
     end
 
     @signature.description = self.class.description

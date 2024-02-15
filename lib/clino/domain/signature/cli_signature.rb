@@ -10,7 +10,16 @@ class CliSignature
   def initialize
     @args = {}
     @args_arr = []
-    @opts = {}
+    @opts = {
+      help: Base::OptSignature.new(
+        name: :help,
+        type: :bool,
+        desc: "Prints this help message",
+        aliases: %w[-h],
+        default: false,
+        exec_skip: true
+      )
+    }
     @description = nil
     @help = nil
   end
@@ -62,8 +71,6 @@ class CliSignature
     end
 
     @help += "\nUsage: #{program_name} [arguments] [options]"
-
-    @help += "\nUse --h, --help to print this help message.\n"
 
     @help
   end

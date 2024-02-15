@@ -33,9 +33,9 @@ module Base
     end
   end
 
-  OptSignature = Struct.new(*BaseSignatureStruct.members, :aliases) do
+  OptSignature = Struct.new(*BaseSignatureStruct.members, :aliases, :exec_skip) do
     include BaseSignature
-    def initialize(name:, type: :string, default: :none, desc: nil, aliases: [])
+    def initialize(name:, type: :string, default: :none, desc: nil, aliases: [], exec_skip: false)
       super
     end
   end

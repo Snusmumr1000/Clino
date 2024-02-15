@@ -4,6 +4,15 @@ require "optparse"
 
 module InputParser
   def parse_input(args_and_opts, signature)
+    args_and_opts = args_and_opts.map do |arg|
+      idx = 0
+      while arg[idx..].start_with?("-") && idx < arg.length
+        idx += 1
+      end
+      part_to_replace = arg[idx..].gsub("-", "_")
+      arg[0...idx] + part_to_replace
+    end
+
     input = {}
     pos_args = []
     allowed_options = signature.allowed_options

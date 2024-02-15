@@ -8,6 +8,7 @@ require_relative "fixtures/ideal_weight_cli"
 require_relative "fixtures/random_generator_cli"
 require_relative "fixtures/reverse_text_min"
 require_relative "fixtures/decoder_min"
+require_relative "fixtures/cut_min"
 
 RSpec.describe "Features" do
   before do
@@ -64,4 +65,9 @@ RSpec.describe "Features" do
     res = DECODER_MIN.start_raw(["--text", world_base64, "--enc", "base64"])
     expect(res).to eq("World")
   end
+  
+  it "replaces underscores with dashes in option and arg names" do
+    res = CUT_MIN.start_raw(%w[Hello --cut-text o])
+    expect(res).to eq("Hell")
+  end 
 end

@@ -16,7 +16,7 @@ class Cli
 
     def opt(name, type: :string, desc: nil, aliases: [], default: :none)
       @opt_buffer ||= {}
-      aliases = aliases.map { |a| "--#{general_strip a, "-"}" }
+      aliases = aliases.map { |a| "-#{general_strip a, "-"}" }
       default = load_input type, default unless default == :none
       @opt_buffer[name] = Base::OptSignature.new(name: name, type: type, default: default, desc: desc,
                                                  aliases: aliases)

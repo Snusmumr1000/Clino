@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 require "rspec"
+require "base64"
 
 require_relative "fixtures/hello_world_min"
 require_relative "fixtures/ideal_weight_cli"
 require_relative "fixtures/random_generator_cli"
+require_relative "fixtures/reverse_text_min"
+require_relative "fixtures/decoder_min"
 
 RSpec.describe "Features" do
   before do
@@ -31,15 +34,34 @@ RSpec.describe "Features" do
 
   it "works with short names for arguments" do
     generated_number = nil
-    while generated_number != 2.0 do generated_number = RANDOM_GENERATOR_CLI.start_raw(%w[1 2 --alg uni --i]) end
+    generated_number = RANDOM_GENERATOR_CLI.start_raw(%w[1 2 --alg uni -i]) while generated_number != 2.0
     expect(generated_number).to eq(2.0)
 
     generated_number = nil
-    while generated_number != 2.0 do generated_number = RANDOM_GENERATOR_CLI.start_raw(%w[1 2 --alg uni --incl]) end
+    generated_number = RANDOM_GENERATOR_CLI.start_raw(%w[1 2 --alg uni --incl]) while generated_number != 2.0
     expect(generated_number).to eq(2.0)
 
     generated_number = nil
-    while generated_number != 2.0 do generated_number = RANDOM_GENERATOR_CLI.start_raw(%w[1 2 --alg uni -i]) end
+    generated_number = RANDOM_GENERATOR_CLI.start_raw(%w[1 2 --alg uni -i]) while generated_number != 2.0
     expect(generated_number).to eq(2.0)
+  end
+
+  it "works with optional arguments" do
+    text = REVERSE_TEXT_MIN.start_raw []
+    expect(text).to eq("Example".reverse)
+
+    text = REVERSE_TEXT_MIN.start_raw ["Hello"]
+    expect(text).to eq("Hello".reverse)
+  end
+
+  it "works with required options" do
+    # expect { DECODER_MIN.start([]) }.to raise_error(ArgumentError)
+
+    res = DECODER_MIN.start_raw(%w[--text Hello])
+    expect(res).to eq("Hello".reverse)
+
+    world_base64 = Base64.encode64("World")
+    res = DECODER_MIN.start_raw(["--text", world_base64, "--enc", "base64"])
+    expect(res).to eq("World")
   end
 end

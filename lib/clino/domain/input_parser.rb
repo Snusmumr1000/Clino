@@ -6,8 +6,9 @@ module InputParser
   def parse_input(args_and_opts, signature)
     input = {}
     pos_args = []
+    allowed_options = signature.allowed_options
     args_and_opts.each do |arg|
-      break if arg.start_with?("--")
+      break if allowed_options.include?(arg)
 
       pos_args << arg
     end
@@ -19,25 +20,20 @@ module InputParser
       input[arg.name] = load_input arg.type, val if arg
     end
 
-    OptionParser.new do |opt|
-      signature.opts.each_key do |name|
-        signature_opt = signature.opts[name]
-        aliases = signature_opt.aliases
+    prev_opt_name = nil
+    allowed_option_to_name = signature.allowed_option_to_name
+    opts.each do |opt|
+      if allowed_options.include?(opt)
+        prev_opt_name = allowed_option_to_name[opt]
+        input[prev_opt_name] = true
+      elsif input[prev_opt_name] == true
+        input[prev_opt_name] = load_input signature.opts[prev_opt_name].type, opt
+        prev_opt_name = nil
+      else
+        raise ArgumentError, "Can't parse #{opt} option"
+      end
+    end
 
-        if signature_opt.required?
-          opt.on(*aliases, "--#{name} #{name.upcase}") do |v|
-            input[name] = load_input signature.opts[name].type, v
-          end
-        else
-          opt.on(*aliases, "--#{name}") do |v|
-            input[name] = load_input signature.opts[name].type, v
-          end
-        end
-      end
-      opt.on("--h", "--help", "Prints this help") do
-        input[:help] = true
-      end
-    end.parse!(opts)
     input
   end
 end

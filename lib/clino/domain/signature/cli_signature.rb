@@ -107,4 +107,28 @@ class CliSignature
     end
     args
   end
+
+  def allowed_options
+    if @allowed_options.nil?
+      @allowed_options = Set.new
+      @allowed_option_to_name = {}
+      @opts.each_value do |opt|
+        long_opt = "--#{opt.name}"
+        @allowed_options.add(long_opt)
+        @allowed_option_to_name[long_opt] = opt.name
+        opt.aliases.each do |alias_|
+          @allowed_options.add(alias_)
+          @allowed_option_to_name[alias_] = opt.name
+        end
+      end
+    end
+    @allowed_options
+  end
+
+  def allowed_option_to_name
+    if @allowed_option_to_name.nil?
+      allowed_options
+    end
+    @allowed_option_to_name
+  end
 end

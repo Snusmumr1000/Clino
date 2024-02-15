@@ -17,7 +17,7 @@ module ResultObtainer
 
     signature.opts.each do |opt_name, opt|
       if opt.required?
-        keyword_values[opt_name] = input[opt_name]
+        keyword_values[opt_name] = input[opt_name] if input.key?(opt_name)
       else
         keyword_values[opt_name] = input[opt_name] unless input[opt_name].nil?
       end

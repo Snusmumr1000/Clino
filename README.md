@@ -48,14 +48,10 @@ Let's write a simple script that takes a name as an argument and prints a greeti
 
 require "clino/interfaces/min"
 
-def hello(name)
-  "Hello, #{name}!"
-end
-
-Min.new(:hello).start
+Min.new(->(name) { "Hello, #{name}!" }).start
 ```
 
-Writing method containing only business logic is enough, as the input and output handling is done by the `Min` interface.
+Writing lambda containing only business logic is enough, as the input and output handling is done by the `Min` interface.
 
 Run the script with the following command:
 
@@ -72,7 +68,7 @@ ruby hello.rb --help
 or 
 
 ```bash
-ruby hello.rb --h
+ruby hello.rb -h
 ```
 
 It will print the following output:
@@ -85,7 +81,6 @@ Arguments:
   <name> [string]
 
 Usage: hello.rb [arguments] [options]
-Use --h, --help to print this help message.
 ```
 #### Randomizer Minimalistic Example
 
@@ -140,7 +135,7 @@ ruby min_randomizer.rb --help
 or
 
 ```bash
-ruby min_randomizer.rb --h
+ruby min_randomizer.rb -h
 ```
 
 It will print the following output:
@@ -163,7 +158,6 @@ Options:
   [--incl] [string]  [default: unknown]
 
 Usage: min_randomizer.rb [arguments] [options]
-Use --h, --help to print this help message.
 ```
 
 As we can see, ruby's metaprogramming capabilities allow us to create a simple CLI, however it doesn't provide a way to handle complex input.
@@ -232,7 +226,7 @@ ruby randomizer.rb --help
 or
 
 ```bash
-ruby randomizer.rb --h
+ruby randomizer.rb -h
 ```
 
 It will print the following output:
@@ -260,7 +254,6 @@ Options:
   [--incl] (-i) [bool]  [default: false]
 
 Usage: randomizer.rb [arguments] [options]
-Use --h, --help to print this help message.
 ```
 
 As we can see, all the default values, helping notes, and types are written out, and the input validation is handled automatically.
@@ -314,7 +307,6 @@ Arguments:
   <height> [positive_integer]
 
 Usage: weight_calculator.rb [arguments] [options]
-Use --h, --help to print this help message.
 ```
 
 ## Improvements

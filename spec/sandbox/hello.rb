@@ -2,8 +2,4 @@
 
 require "clino/interfaces/min"
 
-def hello(name)
-  "Hello, #{name}!"
-end
-
-Min.new(:hello).start
+Min.new(->(name) { "Hello, #{name}!" }).start

@@ -5,14 +5,28 @@ module BaseCli
   include ResultObtainer
 
   def start(args = ARGV)
-    input = parse_input args, @signature
+    input = parse_args_by_signature args
+    return if input.nil?
 
+    print_result run_instance input
+  end
+
+  def start_raw(args)
+    input = parse_args_by_signature args
+    return if input.nil?
+
+    run_instance input
+  end
+
+  def parse_args_by_signature(args)
+    parse_input args, @signature
+  end
+
+  def run_instance(input)
     if input[:help]
-      print_help
-      return
+      return @signature.help
     end
-
-    print_result call_method_with_args @signature, @method, input
+    call_method_with_args @signature, @method, input
   end
 
   def print_help

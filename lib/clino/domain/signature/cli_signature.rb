@@ -126,9 +126,7 @@ class CliSignature
   end
 
   def allowed_option_to_name
-    if @allowed_option_to_name.nil?
-      allowed_options
-    end
+    allowed_options if @allowed_option_to_name.nil?
     @allowed_option_to_name
   end
 end
